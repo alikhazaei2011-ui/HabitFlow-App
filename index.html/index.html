@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f5f6fa">
+<title>HabitFlow | عادت‌های بهتر</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+ --bg:#f5f6fa;--surface:#fff;--text:#20283a;--muted:#8992a5;
+ --primary:#5278d8;--soft:#eaf0ff;--border:#edf0f5;
+ --green:#21a67a;--red:#e36c78;--shadow:0 8px 30px #25365b0b;
+}
+body.dark{
+ --bg:#101522;--surface:#191f30;--text:#f0f3fa;--muted:#929bb0;
+ --primary:#7899f2;--soft:#273451;--border:#2a3245;
+ --shadow:0 8px 30px #0002;
+}
+*{box-sizing:border-box}
+body{
+ margin:0;background:var(--bg);color:var(--text);
+ font-family:'Vazirmatn',sans-serif;transition:.25s;
+}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.app{max-width:1100px;margin:auto;padding:25px 22px 100px}
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:35px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{
+ width:45px;height:45px;border-radius:15px;background:var(--primary);
+ display:grid;place-items:center;color:white;font-size:23px;font-weight:900;
+ box-shadow:0 7px 18px #5278d83b
+}
+.brand h2{font-size:19px;margin:0;font-weight:900;letter-spacing:-.5px}
+.brand p{font-size:11px;color:var(--muted);margin:1px 0 0}
+.icon-btn{
+ border:1px solid var(--border);background:var(--surface);color:var(--text);
+ width:43px;height:43px;border-radius:14px;font-size:19px
+}
+.greeting{margin-bottom:25px}
+.greeting small{color:var(--primary);font-weight:700}
+.greeting h1{font-size:27px;margin:7px 0;font-weight:900}
+.greeting p{margin:0;color:var(--muted);font-size:13px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:25px}
+.stat{
+ background:var(--surface);border:1px solid var(--border);border-radius:19px;
+ padding:19px;box-shadow:var(--shadow)
+}
+.stat .label{font-size:12px;color:var(--muted)}
+.stat .number{font-size:27px;font-weight:900;margin-top:8px}
+.stat .unit{font-size:12px;color:var(--muted);font-weight:500}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin:28px 0 15px}
+.section-head h3{font-size:17px;margin:0;font-weight:800}
+.add-btn{
+ border:0;background:var(--primary);color:white;padding:11px 17px;
+ border-radius:13px;font-size:12px;font-weight:700
+}
+.progress-card{
+ background:var(--surface);border:1px solid var(--border);
+ padding:20px;border-radius:20px;box-shadow:var(--shadow)
+}
+.progress-top{display:flex;justify-content:space-between;align-items:center}
+.progress-top strong{font-size:14px}
+.progress-top span{font-size:13px;color:var(--primary);font-weight:800}
+.track{height:9px;background:var(--soft);border-radius:20px;margin-top:17px;overflow:hidden}
+.fill{height:100%;width:0;background:var(--primary);border-radius:20px;transition:.3s}
+.filters{display:flex;gap:8px;overflow:auto;padding-bottom:5px}
+.filter{
+ border:1px solid var(--border);background:var(--surface);color:var(--muted);
+ border-radius:11px;padding:8px 15px;font-size:12px;white-space:nowrap
+}
+.filter.active{background:var(--soft);border-color:var(--primary);color:var(--primary);font-weight:700}
+.habits{display:grid;gap:11px}
+.habit{
+ background:var(--surface);border:1px solid var(--border);border-radius:17px;
+ padding:15px;display:flex;align-items:center;gap:13px;box-shadow:var(--shadow)
+}
+.habit-icon{
+ width:47px;height:47px;flex-shrink:0;border-radius:15px;
+ background:var(--soft);display:grid;place-items:center;font-size:22px
+}
+.habit-info{flex:1;min-width:0}
+.habit-info strong{font-size:14px;display:block}
+.habit-info small{font-size:11px;color:var(--muted)}
+.habit-actions{display:flex;align-items:center;gap:8px}
+.check{
+ width:35px;height:35px;border:1.5px solid var(--border);border-radius:11px;
+ background:transparent;color:white;font-size:17px
+}
+.check.done{background:var(--green);border-color:var(--green)}
+.delete{
+ border:0;background:transparent;color:var(--muted);font-size:17px;padding:5px
+}
+.empty{
+ text-align:center;padding:35px 15px;background:var(--surface);
+ border:1px dashed var(--border);border-radius:18px;color:var(--muted);font-size:13px
+}
+.modal-bg{
+ position:fixed;inset:0;background:#10152299;display:none;
+ align-items:center;justify-content:center;padding:18px;z-index:10
+}
+.modal-bg.show{display:flex}
+.modal{
+ width:100%;max-width:420px;background:var(--surface);border-radius:23px;
+ padding:24px;box-shadow:0 20px 80px #0003
+}
+.modal h3{margin:0 0 20px;font-size:19px}
+.field{margin:15px 0}
+.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:8px}
+.field input,.field select{
+ width:100%;padding:13px;border:1px solid var(--border);
+ border-radius:12px;background:var(--bg);color:var(--text);outline:none
+}
+.field input:focus,.field select:focus{border-color:var(--primary)}
+.modal-actions{display:flex;gap:9px;margin-top:22px}
+.modal-actions button{flex:1;padding:12px;border-radius:12px;border:0;font-weight:700}
+.save{background:var(--primary);color:white}
+.cancel{background:var(--soft);color:var(--text)}
+footer{text-align:center;color:var(--muted);font-size:10px;margin-top:35px}
+@media(max-width:600px){
+ .app{padding:20px 15px 80px}
+ .stats{gap:8px}
+ .stat{padding:13px}
+ .stat .number{font-size:23px}
+ .greeting h1{font-size:23px}
+ .habit{padding:12px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+ <div class="brand">
+  <div class="logo">H</div>
+  <div><h2>HabitFlow</h2><p>BUILD YOUR BETTER SELF</p></div>
+ </div>
+ <button class="icon-btn" id="themeBtn" aria-label="تغییر تم">☾</button>
+</header>
+
+<section class="greeting">
+ <small id="todayDate">امروز</small>
+ <h1>قدم‌های کوچک، تغییرهای بزرگ.</h1>
+ <p>امروز برای ساختن نسخه بهتر خودت آماده‌ای؟</p>
+</section>
+
+<section class="stats">
+ <div class="stat"><div class="label">کل عادت‌ها</div><div class="number" id="total">۰</div></div>
+ <div class="stat"><div class="label">انجام‌شده امروز</div><div class="number" id="completed">۰</div></div>
+ <div class="stat"><div class="label">درصد پیشرفت</div><div class="number" id="percentage">۰<span class="unit">٪</span></div></div>
+</section>
+
+<section class="progress-card">
+ <div class="progress-top">
+  <strong>پیشرفت امروز</strong><span id="progressText">۰٪ تکمیل شده</span>
+ </div>
+ <div class="track"><div class="fill" id="progressFill"></div></div>
+</section>
+
+<div class="section-head">
+ <h3>عادت‌های من</h3>
+ <button class="add-btn" id="openModal">＋ عادت جدید</button>
+</div>
+
+<div class="filters">
+ <button class="filter active" data-filter="all">همه</button>
+ <button class="filter" data-filter="positive">عادت‌های مثبت</button>
+ <button class="filter" data-filter="negative">ترک عادت</button>
+</div>
+
+<div class="habits" id="habitsList" style="margin-top:14px"></div>
+<footer>HABITFLOW · YOUR JOURNEY STARTS TODAY</footer>
+</div>
+
+<div class="modal-bg" id="modal">
+ <div class="modal">
+  <h3>ساخت عادت جدید ✨</h3>
+  <div class="field">
+   <label>نام عادت</label>
+   <input id="habitName" placeholder="مثلاً مطالعه روزانه">
+  </div>
+  <div class="field">
+   <label>ایموجی عادت</label>
+   <input id="habitEmoji" value="🎯" maxlength="4">
+  </div>
+  <div class="field">
+   <label>نوع عادت</label>
+   <select id="habitType">
+    <option value="positive">عادت مثبت</option>
+    <option value="negative">عادت برای ترک کردن</option>
+   </select>
+  </div>
+  <div class="modal-actions">
+   <button class="cancel" id="closeModal">انصراف</button>
+   <button class="save" id="saveHabit">ساخت عادت</button>
+  </div>
+ </div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const today=()=>new Date().toISOString().slice(0,10);
+let habits=JSON.parse(localStorage.getItem('hf_habits')||'[]');
+let filter='all';
+
+function save(){
+ localStorage.setItem('hf_habits',JSON.stringify(habits));
+ render();
+}
+function render(){
+ const list=$('habitsList');
+ const shown=habits.filter(h=>filter==='all'||h.type===filter);
+ const done=habits.filter(h=>h.done===today()).length;
+ const percent=habits.length?Math.round(done/habits.length*100):0;
+ $('total').textContent=habits.length;
+ $('completed').textContent=done;
+ $('percentage').innerHTML=percent+'<span class="unit">٪</span>';
+ $('progressText').textContent=percent+'٪ تکمیل شده';
+ $('progressFill').style.width=percent+'%';
+
+ if(!shown.length){
+  list.innerHTML='<div class="empty">هنوز عادتی ثبت نکردی.<br>اولین عادتت رو بساز! ✨</div>';
+  return;
+ }
+ list.innerHTML=shown.map(h=>`
+ <div class="habit">
+  <div class="habit-icon">${escapeHTML(h.emoji)}</div>
+  <div class="habit-info">
+   <strong>${escapeHTML(h.name)}</strong>
+   <small>${h.type==='positive'?'عادت مثبت':'ترک عادت'}</small>
+  </div>
+  <div class="habit-actions">
+   <button class="check ${h.done===today()?'done':''}" data-check="${h.id}">${h.done===today()?'✓':''}</button>
+   <button class="delete" data-delete="${h.id}" aria-label="حذف عادت">✕</button>
+  </div>
+ </div>`).join('');
+}
+function escapeHTML(value){
+ return String(value).replace(/[&<>"']/g,c=>({
+ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+ }[c]));
+}
+$('habitsList').addEventListener('click',e=>{
+ const check=e.target.closest('[data-check]');
+ const del=e.target.closest('[data-delete]');
+ if(check){
+  const h=habits.find(x=>x.id===check.dataset.check);
+  if(h)h.done=h.done===today()?null:today();
+  save();
+ }
+ if(del){
+  habits=habits.filter(x=>x.id!==del.dataset.delete);
+  save();
+ }
+});
+$('openModal').onclick=()=>$('modal').classList.add('show');
+$('closeModal').onclick=()=>$('modal').classList.remove('show');
+$('modal').addEventListener('click',e=>{
+ if(e.target===$('modal'))$('modal').classList.remove('show');
+});
+$('saveHabit').onclick=()=>{
+ const name=$('habitName').value.trim();
+ if(!name){$('habitName').focus();return}
+ habits.push({
+  id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),
+  name,emoji:$('habitEmoji').value.trim()||'🎯',
+  type:$('habitType').value,done:null
+ });
+ $('habitName').value='';
+ $('habitEmoji').value='🎯';
+ $('modal').classList.remove('show');
+ save();
+};
+document.querySelectorAll('.filter').forEach(btn=>{
+ btn.onclick=()=>{
+  filter=btn.dataset.filter;
+  document.querySelectorAll('.filter').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+ };
+});
+function setTheme(dark){
+ document.body.classList.toggle('dark',dark);
+ $('themeBtn').textContent=dark?'☀':'☾';
+ localStorage.setItem('hf_theme',dark?'dark':'light');
+}
+setTheme(localStorage.getItem('hf_theme')==='dark');
+$('themeBtn').onclick=()=>setTheme(!document.body.classList.contains('dark'));
+const date=new Intl.DateTimeFormat('fa-IR',{weekday:'long',day:'numeric',month:'long'});
+$('todayDate').textContent=date.format(new Date());
+render();
+</script>
+</body>
+</html>
